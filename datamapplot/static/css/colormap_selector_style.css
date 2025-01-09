@@ -3,6 +3,7 @@
     background-color: inherit;
     z-index: 2;
 }
+
 .color-map-selected {
     display: flex;
     align-items: center;
@@ -13,6 +14,7 @@
     width: 100%;
     box-sizing: border-box;
 }
+
 .color-map-options {
     position: absolute;
     bottom: 100%;
@@ -27,17 +29,20 @@
     overflow-y: auto;
     display: none;
     box-sizing: border-box;
-    padding-top: 10px; /* Ensure spacing at the top for the search bar */
+    padding-top: 10px;
 }
+
 .color-map-option {
     display: flex;
     align-items: center;
     padding: 10px;
     cursor: pointer;
 }
+
 .color-map-option:hover {
     background-color: #77777733;
 }
+
 .color-swatch {
     display: inline-block;
     width: fit-content;
@@ -45,6 +50,7 @@
     margin-right: 10px;
     border-radius: 4px;
 }
+
 .color-swatch-box {
     display: inline-block;
     width: 12px;
@@ -53,9 +59,11 @@
     line-height: 10px;
     cursor: pointer;
 }
+
 .color-map-text {
     flex-grow: 1;
 }
+
 .colorbar-container {
     display: flex;
     align-items: center;
@@ -65,77 +73,75 @@
     font-family: Arial, sans-serif;
     height: 200px;
 }
+
 .colorbar {
     width: 10px;
     height: 200px;
     position: relative;
 }
+
 .tick-container {
     position: relative;
     width: 40px;
     height: 200px;
 }
+
 .tick {
     position: absolute;
     display: flex;
     align-items: center;
     gap: 4px;
-    /* Adjust vertical positioning to center on the actual value */
     transform: translateY(-50%);
 }
+
 .tick-line {
     width: 8px;
     height: 1px;
     background: #333;
 }
+
 .tick-label {
     font-size: 12px;
 }
+
 .legend-item {
     display: flex;
     align-items: left;
     gap: 4px;
     padding: 4px;
 }
+
 .legend-label {
     font-size: 12px;
 }
 
-/* Style for the search input box */
 .color-map-search {
-    width: calc(100% - 40px); /* To leave space for the clear button */
-    padding: 8px;
-    margin: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 14px;
-    outline: none;
+    position: relative; /* Ensures .clear-button aligns relative to the search bar */
+    padding: 4px 30px 4px 8px; /* Add right padding for the clear button */
+    box-sizing: border-box; /* Prevents layout shifting */
+    height: 30px; /* Search bar height */
+    line-height: 30px; /* Aligns text vertically */
 }
 
 .color-map-search:focus {
-    border-color: #007bff; /* Highlight border when focused */
+    border-color: #007bff;
     box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
 }
 
-/* Style for the clear button */
 .clear-button {
+    position: absolute; /* Positioned relative to .color-map-search */
+    right: 10px; /* Align the button to the right inside the search box */
+    top: 17px; /* Align button with the top of the search bar */
     background-color: transparent;
     border: none;
-    padding: 4px;
+    padding: 0; /* Clean up extra padding */
     cursor: pointer;
-    margin: 8px;
-    align-self: center;
-    width: 24px;
-    height: 24px;
-    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.clear-button:hover {
-    background-color: #ddd;
-    border-radius: 50%;
+    pointer-events: all; /* Ensure button remains clickable */
 }
 
 /* SVG style for the clear button */
