@@ -127,6 +127,7 @@
     box-sizing: border-box; /* Prevents layout shifting */
     height: 30px; /* Search bar height */
     line-height: 30px; /* Aligns text vertically */
+    width: 250px;
 }
 
 .color-map-search:focus {
