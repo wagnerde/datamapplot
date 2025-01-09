@@ -2,6 +2,9 @@
     position: relative;
     background-color: inherit;
     z-index: 2;
+    display: flex; /* Align children horizontally */
+    align-items: center; /* Align children vertically */
+    width: 300px !important;
 }
 
 .color-map-selected {
@@ -11,7 +14,7 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     cursor: pointer;
-    width: 100%;
+    width: 100% !important;
     box-sizing: border-box;
 }
 
@@ -28,6 +31,7 @@
     max-height: 500px;
     overflow-y: auto;
     display: none;
+    width: 100% !important;
     box-sizing: border-box;
     padding-top: 10px;
 }
@@ -37,6 +41,8 @@
     align-items: center;
     padding: 10px;
     cursor: pointer;
+    width: 250px !important;
+
 }
 
 .color-map-option:hover {
@@ -146,6 +152,25 @@
 
 /* SVG style for the clear button */
 .clear-button svg {
+    fill: none;
+    stroke: black;
+    stroke-width: 2;
+}
+/* Reset button styles (matches clear button) */
+.reset-button {
+    position: absolute;
+    left: 335px; /* Place it immediately to the right of the dropdown 245px */ 
+    bottom: 27px; /* Vertically center it 27px */
+    transform: translateY(-50%); /* Correct vertical alignment */
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 10; /* Ensure it's on top of other elements */
+}
+
+.reset-button svg {
     fill: none;
     stroke: black;
     stroke-width: 2;

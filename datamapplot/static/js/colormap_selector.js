@@ -344,7 +344,7 @@ class ColormapSelectorTool {
         this.colorMapOptions.style.display = 'none';
         this.colorMapOptions.style.width = `${maxWidth}px`;
 
-        // Add search input and clear button
+        // Add search input and clear button to dropdown
         this.colorMapOptions.appendChild(this.searchInput);
         this.colorMapOptions.appendChild(this.clearButton);
 
@@ -352,8 +352,21 @@ class ColormapSelectorTool {
         this.colorMapContainer.appendChild(this.colorMapDropdown);
         this.colorMapContainer.style.width = `${maxWidth + 20}px`;
 
+        // Create reset button as a separate entity
+        this.resetButton = document.createElement("button");
+        this.resetButton.className = "reset-button";
+        this.resetButton.title = "Reset colormap to default";
+        this.resetButton.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <line x1="4" y1="4" x2="20" y2="20" stroke="black" stroke-width="2" />
+                <line x1="4" y1="20" x2="20" y2="4" stroke="black" stroke-width="2" />
+            </svg>
+        `;
+        this.colorMapContainer.appendChild(this.resetButton); // Append next to dropdown DEW
+
         this.searchInput.addEventListener("input", () => this.filterColorMapOptions());
         this.clearButton.addEventListener("click", () => this.resetSearch());
+        this.resetButton.addEventListener("click", () => this.handleResetColormap());
 
         this.colorMapDropdown.addEventListener('click', (e) => {
             if (e.target !== this.searchInput) {
@@ -366,6 +379,17 @@ class ColormapSelectorTool {
         this.populateLegends();
 
         document.body.removeChild(this.measureDiv);
+    }
+
+    handleResetColormap() {
+        this.selectedColorMap = this.colorMaps[0]; // Reset to default colormap
+        this.updateSelectedColorMap(); // Update the displayed colormap
+        this.datamap.resetPointColors(); // Clear colors from datamap
+        this.legendContainer.style.display = 'none'; // Hide the legend
+        this.colorMapOptions.style.display = 'none'; // Close the dropdown if it's open
+        // Clear the search input
+        this.searchInput.value = ""; 
+        this.filterColorMapOptions(); // Ensure all options are shown again
     }
 
     calculateMaxWidth() {
