@@ -242,16 +242,13 @@ class ColorLegend {
             if (selection) {
                 if (this.selectedItems.has(selection)) {
                     this.selectedItems.delete(selection);
-                    // event.srcElement.innerHTML = "";
                 } else {
                     this.selectedItems.add(selection);
-                    // event.srcElement.innerHTML = "●";
                 }
                 const selectedIndices = [];
                 this.selectedItems.forEach((color) => {
                     const selectedColor = convertRGBtoObj(color);
                     for (let i = 0; i < this.colorData[`${this.colorField}_r`].length; i++) {
-                        ;
                         if (Math.abs(this.colorData[`${this.colorField}_r`][i] - selectedColor.r) <= 1 &&
                             Math.abs(this.colorData[`${this.colorField}_g`][i] - selectedColor.g) <= 1 &&
                             Math.abs(this.colorData[`${this.colorField}_b`][i] - selectedColor.b) <= 1) {
@@ -279,7 +276,6 @@ class ColorLegend {
 }
 
 class ColormapSelectorTool {
-
     constructor(colorMaps, colorMapContainer, colorData, legendContainer, datamap, nColors = 5) {
         this.colorMaps = colorMaps;
         this.colorMapContainer = colorMapContainer;
@@ -294,20 +290,32 @@ class ColormapSelectorTool {
             }
         }
 
-        // Handle color map item selection
         this.selectedColorMap = colorMaps[0];
 
-        // Create a temporary div to measure option widths
+        // Create search input and SVG-based clear button
+        this.searchInput = document.createElement("input");
+        this.searchInput.type = "text";
+        this.searchInput.placeholder = "Search colormaps...";
+        this.searchInput.className = "color-map-search";
+
+        this.clearButton = document.createElement("button");
+        this.clearButton.className = "clear-button";
+        this.clearButton.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <line x1="4" y1="4" x2="20" y2="20" stroke="black" stroke-width="2" />
+                <line x1="4" y1="20" x2="20" y2="4" stroke="black" stroke-width="2" />
+            </svg>
+        `;
+        this.clearButton.title = "Clear search";
+
         this.measureDiv = document.createElement("div");
         this.measureDiv.style.position = "absolute";
         this.measureDiv.style.visibility = "hidden";
         this.measureDiv.style.whiteSpace = "nowrap";
         document.body.appendChild(this.measureDiv);
 
-        // Calculate the maximum width before creating the dropdown
         const maxWidth = this.calculateMaxWidth();
 
-        // Create the required DOM elements
         this.colorMapDropdown = document.createElement("div");
         this.colorMapDropdown.className = "color-map-dropdown";
         this.colorMapDropdown.style.width = `${maxWidth}px`;
@@ -336,51 +344,53 @@ class ColormapSelectorTool {
         this.colorMapOptions.style.display = 'none';
         this.colorMapOptions.style.width = `${maxWidth}px`;
 
+        // Add search input and clear button
+        this.colorMapOptions.appendChild(this.searchInput);
+        this.colorMapOptions.appendChild(this.clearButton);
+
         this.colorMapDropdown.appendChild(this.colorMapOptions);
         this.colorMapContainer.appendChild(this.colorMapDropdown);
         this.colorMapContainer.style.width = `${maxWidth + 20}px`;
 
-        // Attach event listeners
-        this.colorMapDropdown.addEventListener('click', (e) => { this.colorMapOptions.style.display = this.colorMapOptions.style.display === 'none' ? 'block' : 'none' });
+        this.searchInput.addEventListener("input", () => this.filterColorMapOptions());
+        this.clearButton.addEventListener("click", () => this.resetSearch());
 
+        this.colorMapDropdown.addEventListener('click', (e) => {
+            if (e.target !== this.searchInput) {
+                this.colorMapOptions.style.display = this.colorMapOptions.style.display === 'none' ? 'block' : 'none';
+            }
+        });
 
-        // Initial setup
         this.updateSelectedColorMap();
         this.populateColorMapOptions();
         this.populateLegends();
 
-        // Clean up measurement div
         document.body.removeChild(this.measureDiv);
     }
 
     calculateMaxWidth() {
         let maxWidth = 0;
 
-        // Create a sample option with the same styling
         this.measureDiv.className = "color-map-option";
 
-        // Measure each option
         for (const colorMap of this.colorMaps) {
             this.measureDiv.innerHTML = `${this.createColorSwatch(colorMap.colors)} <span class="color-map-text">${colorMap.description}</span>`;
-            const width = this.measureDiv.offsetWidth + 40; // Add padding for arrow and borders
+            const width = this.measureDiv.offsetWidth + 40;
             maxWidth = Math.max(maxWidth, width);
         }
 
         return maxWidth;
     }
 
-    // Create a color swatch
     createColorSwatch(colors, categorical = false) {
         const n = Math.min(this.nColors, colors.length);
         var result = '<span class="color-swatch">'
         if (colors.length > 16 && !categorical) {
-            // Long color maps are likely continuous so sample uniformly across the range
             const stepSize = (colors.length - 1) / (n - 1);
             for (let i = 0; i < colors.length; i += stepSize) {
                 result += `<span class="color-swatch-box"; style="background: ${colors[Math.round(i)]}"></span>`
             }
         } else {
-            // Short color maps are likely categorical and we can just take the first nColors elements
             for (let i = 0; i < n; i++) {
                 result += `<span class="color-swatch-box"; style="background: ${colors[Math.round(i)]}"></span>`
             }
@@ -389,18 +399,29 @@ class ColormapSelectorTool {
         return result;
     }
 
+    filterColorMapOptions() {
+        const searchTerm = this.searchInput.value.toLowerCase();
+        this.colorMapOptions.querySelectorAll('.color-map-option').forEach(option => {
+            const text = option.textContent.toLowerCase();
+            option.style.display = text.includes(searchTerm) ? 'block' : 'none';
+        });
+    }
+
+    resetSearch() {
+        this.searchInput.value = "";
+        this.filterColorMapOptions();
+    }
 
     handleColorMapSelection(colorMap) {
         this.selectedColorMap = colorMap;
         this.updateSelectedColorMap();
 
-        // Dispatch recolor to the datamap
         if (colorMap.field === 'none') {
             this.datamap.resetPointColors();
             this.legendContainer.style.display = 'none';
         } else {
             this.datamap.recolorPoints(this.colorData, colorMap.field);
-            if (((colorMap.kind === "categorical") && ((colorMap.colors.length <= 20) || colorMap.showLegend) && Object.hasOwn(colorMap, "colorMapping")) || (colorMap.kind === "continuous") || (colorMap.kind === "datetime")) {
+            if (((colorMap.kind === "categorical") && (colorMap.colors.length <= 20) && Object.hasOwn(colorMap, "colorMapping")) || (colorMap.kind === "continuous") || (colorMap.kind === "datetime")) {
                 this.legendContainer.style.display = 'block';
                 for (const key in this.legends) {
                     this.legends[key].style.display = 'none';
@@ -435,7 +456,7 @@ class ColormapSelectorTool {
             }
             this.legends[colorMap.field] = document.createElement("div");
             this.legends[colorMap.field].style.display = 'none';
-            if ((colorMap.kind === "categorical") && ((colorMap.colors.length <= 20) || colorMap.showLegend) && Object.hasOwn(colorMap, "colorMapping")) {
+            if ((colorMap.kind === "categorical") && (colorMap.colors.length <= 20) && Object.hasOwn(colorMap, "colorMapping")) {
                 new ColorLegend(this.legends[colorMap.field], this.datamap, this.colorData, colorMap.field, { colormap: colorMap.colorMapping });
             } else if (colorMap.kind === "continuous") {
                 new Colorbar(this.legends[colorMap.field], { colormap: colorMap.colors, label: colorMap.description, min: colorMap.valueRange[0], max: colorMap.valueRange[1] });
@@ -446,3 +467,4 @@ class ColormapSelectorTool {
         }
     }
 }
+
