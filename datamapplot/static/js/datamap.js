@@ -76,7 +76,7 @@ class DataMap {
         longitude: dataCenter[0],
         zoom: zoomLevel
       },
-      controller: { scrollZoom: { speed: 0.01, smooth: true } },
+      controller: { scrollZoom: { speed: 0.01, smooth: false } },
     });
     this.updateTriggerCounter = 0;
     this.dataSelectionManager = new DataSelectionManager(lassoSelectionItemId);
