@@ -2,8 +2,8 @@
     position: relative;
     background-color: inherit;
     z-index: 2;
-  }
-  .color-map-selected {
+}
+.color-map-selected {
     display: flex;
     align-items: center;
     padding: 10px;
@@ -12,8 +12,8 @@
     cursor: pointer;
     width: 100%;
     box-sizing: border-box;
-  }
-  .color-map-options {
+}
+.color-map-options {
     position: absolute;
     bottom: 100%;
     left: 0;
@@ -27,35 +27,36 @@
     overflow-y: auto;
     display: none;
     box-sizing: border-box;
-  }
-  .color-map-option {
+    padding-top: 10px; /* Ensure spacing at the top for the search bar */
+}
+.color-map-option {
     display: flex;
     align-items: center;
     padding: 10px;
     cursor: pointer;
-  }
-  .color-map-option:hover {
+}
+.color-map-option:hover {
     background-color: #77777733;
-  }
-  .color-swatch {
+}
+.color-swatch {
     display: inline-block;
     width: fit-content;
     height: 20px;
     margin-right: 10px;
     border-radius: 4px;
-  }
-  .color-swatch-box {
+}
+.color-swatch-box {
     display: inline-block;
     width: 12px;
     height: 12px;
     text-align: center;
     line-height: 10px;
     cursor: pointer;
-  }
-  .color-map-text {
+}
+.color-map-text {
     flex-grow: 1;
-  }
-  .colorbar-container {
+}
+.colorbar-container {
     display: flex;
     align-items: center;
     width: fit-content;
@@ -63,40 +64,83 @@
     padding: 10px;
     font-family: Arial, sans-serif;
     height: 200px;
-  }
-
-  .colorbar {
+}
+.colorbar {
     width: 10px;
     height: 200px;
     position: relative;
-  }
-  .tick-container {
+}
+.tick-container {
     position: relative;
     width: 40px;
     height: 200px;
-  }
-  .tick {
+}
+.tick {
     position: absolute;
     display: flex;
     align-items: center;
     gap: 4px;
     /* Adjust vertical positioning to center on the actual value */
     transform: translateY(-50%);
-  }
-  .tick-line {
+}
+.tick-line {
     width: 8px;
     height: 1px;
     background: #333;
-  }
-  .tick-label {
+}
+.tick-label {
     font-size: 12px;
-  }
-  .legend-item {
+}
+.legend-item {
     display: flex;
     align-items: left;
     gap: 4px;
     padding: 4px;
-  }
-  .legend-label {
+}
+.legend-label {
     font-size: 12px;
-  }
+}
+
+/* Style for the search input box */
+.color-map-search {
+    width: calc(100% - 40px); /* To leave space for the clear button */
+    padding: 8px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+    outline: none;
+}
+
+.color-map-search:focus {
+    border-color: #007bff; /* Highlight border when focused */
+    box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+/* Style for the clear button */
+.clear-button {
+    background-color: transparent;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    margin: 8px;
+    align-self: center;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.clear-button:hover {
+    background-color: #ddd;
+    border-radius: 50%;
+}
+
+/* SVG style for the clear button */
+.clear-button svg {
+    fill: none;
+    stroke: black;
+    stroke-width: 2;
+}
