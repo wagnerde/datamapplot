@@ -121,6 +121,16 @@
     font-size: 12px;
 }
 
+.legend-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 800px; /* Adjust the maximum height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+    width: 100%; /* Optional: Adjust width */
+    box-sizing: border-box; /* Ensure padding is included in width */
+    background-color: inherit; /* Match background color */
+}
+
 .color-map-search {
     position: relative; /* Ensures .clear-button aligns relative to the search bar */
     padding: 4px 30px 4px 8px; /* Add right padding for the clear button */

@@ -216,6 +216,7 @@ class ColorLegend {
         this.selectedItems = new Set();
         this.legendItems = [];
         this.render();
+        this.container.className = 'legend-container';
     }
 
     render() {
